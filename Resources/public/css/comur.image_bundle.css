@@ -12,10 +12,10 @@
     padding: 2px;
     display: inline-block;
     margin: 10px;
-    min-height: 150px;
-    min-width: 150px;
-    height: 150px;
-    width: 150px;
+    min-height: 250px;
+    min-width: 200px;
+    height: 250px;
+    width: 200px;
     cursor: move;
     text-align: center;
     background-color: #fff;
@@ -38,8 +38,8 @@
 {
     position: absolute;
     line-height: normal;
-    margin-left: -5px;
-    margin-top: -10px;
+    margin-left: 0px;
+    margin-top: 75px;
     cursor: hand;
     cursor: pointer;
     text-align: left;

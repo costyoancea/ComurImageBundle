@@ -46,17 +46,17 @@ class CroppableGalleryType extends CroppableImageType
         //         // 'property_path' => $options['uploadConfig']['saveOriginal'],
         //         'attr' => array('style' => 'opacity: 0;width: 0; max-width: 0; height: 0; max-height: 0;')));
         // }
-
-        $builder->add($builder->getName(), 'collection', array(
+        $builder->add(
+            $builder->create(
+            $builder->getName(), 'collection', array(
             // 'property_path' => $builder->getName(),
             // 'inherit_data' => true,
+            'type' => new ImageGallery(),
             'allow_add' => function(Options $options, $value){ return true; },
             'allow_delete' => function(Options $options, $value){ return true; },
-            'options' => array(
-                'attr' => array('style' => 'opacity: 0;width: 0; max-width: 0; height: 0; max-height: 0;padding: 0; position: absolute;'
-                    )
-                )
-            ));
+        )));
+
+
     }
 
     public function __construct($galleryDir, $thumbsDir, $galleryThumbSize)
