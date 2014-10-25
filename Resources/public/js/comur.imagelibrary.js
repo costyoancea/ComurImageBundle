@@ -1,5 +1,4 @@
 var galleries = {};
-
 $(function(){
     $('.fileinput-button').click(function(event){
         if( $( event.target ).is( "span" ) )
@@ -239,16 +238,22 @@ function removeImageFromGallery(filename, id)
 {
 
     // ADD DELETE FILE HERE !
-    $('#'+id).parent().remove();
+    $('#'+id).parent().parent().parent().remove();
     reorderItems(id);
 
 }
 
 function reorderItems(id)
 {
+
     var name = $('#'+id).data('name');
+    var map = ["location","title", "url"];
+
     $( '#'+id+' .gallery-image-container' ).each(function(i, item){
-        $(item).find('input').attr('name', name+'['+i+']');
+        $(item).find('input').each(function(j,input) {
+            $(input).attr('name', name+'['+i+']['+map[j]+']');
+
+        });
     });
 }
 

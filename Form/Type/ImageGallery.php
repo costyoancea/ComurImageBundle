@@ -25,10 +25,12 @@ class ImageGallery extends AbstractType
                    'attr' => array('style' => 'opacity: 0;width: 0; max-width: 0; height: 0; max-height: 0;padding: 0; position: absolute;')
                 ))
             ->add('title', 'text', array(
+                'required' => false,
                 'label_attr' => array('style' => 'float:left; width:20%;'),
                 'attr' => array('style' => 'float:left; width:70%;')
             ))
             ->add('url', 'url', array(
+                'required' => false,
                 'label_attr' => array('style' => 'float:left; width:20%;'),
                 'attr' => array('style' => 'float:left; width:70%;')
             ));
