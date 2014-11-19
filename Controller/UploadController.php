@@ -252,7 +252,7 @@ class UploadController extends Controller
         }
         else{
             $h = $srcH;
-            $w = $srcW * ($maxtH / $maxW);
+            $w = $srcW * ($maxH / $maxW);
             $x = round($srcW - $w / 2, 0);
         }
         return array($w, $h, $x, $y);
