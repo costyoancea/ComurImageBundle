@@ -7,7 +7,7 @@
         {% if options.uploadConfig.saveOriginal %}
             {{ form_widget(form[options.uploadConfig.saveOriginal])}}
         {% endif %}
-        
+
         <div class="field-error clearfix hidden">
             <div id="{{form[name].vars.id}}_widget_error" class="alert alert-danger span6">
             </div>
@@ -18,6 +18,12 @@
                     <i class="icon-edit icon-white"></i> {% trans %}Edit{% endtrans %}
                 </span>
             </div>
+            <div class="image_delete_button ">
+                <span class="btn btn-success select-image-button">
+                    <i class="icon-edit icon-white"></i> {% trans %}Delete{% endtrans %}
+                </span>
+            </div>
+
             <div id="image_preview_image_{{form[name].vars.id}}">
                 {% if not options.fieldImage %}
                     {% if form[name].vars.value %}
@@ -32,7 +38,7 @@
                         <img src="http://placehold.it/{{ options.fieldImage.maxWidth }}x{{ options.fieldImage.maxHeight}}" id="{{ form[name].vars.id }}_preview"/>
                     {% endif %}
                 {% endif %}
-                
+
             </div>
         </div>
     {% endspaceless %}
@@ -40,33 +46,48 @@
     <script>
         $(document).ready(function(){
             {% if options.uploadConfig.saveOriginal %}
-                if($('#{{ form[options.uploadConfig.saveOriginal].vars.id }}').val()){
-                    $('#{{ form[name].vars.id }}_preview').click(function(e){
-                        // console.log(e.target);
-                        if($( e.target ).is( "img" )){
-                            $('<div class="modal hide fade"><img src="/{{options.uploadConfig.webDir}}/{{ form[options.uploadConfig.saveOriginal].vars.value }}"/></div>').modal();
-                            return false;
-                        }
-                    });
-                }
+            if($('#{{ form[options.uploadConfig.saveOriginal].vars.id }}').val()){
+                $('#{{ form[name].vars.id }}_preview').click(function(e){
+                    // console.log(e.target);
+                    if($( e.target ).is( "img" )){
+                        $('<div class="modal hide fade"><img src="/{{options.uploadConfig.webDir}}/{{ form[options.uploadConfig.saveOriginal].vars.value }}"/></div>').modal();
+                        return false;
+                    }
+                });
+            }
             {% endif %}
-            $('#image_preview_{{ form[name].vars.id }}.select-image-button .image_edit_button').click(function(event){ 
+            $('#image_preview_{{ form[name].vars.id }}.select-image-button .image_edit_button').click(function(event){
                 var options = $.parseJSON('{{ options | json_encode() | raw }}');
                 {% if options.uploadConfig.saveOriginal %}
-                    options['originalImageFieldId'] = '{{ form[options.uploadConfig.saveOriginal].vars.id }}';
+                options['originalImageFieldId'] = '{{ form[options.uploadConfig.saveOriginal].vars.id }}';
                 {% endif %}
-                initializeImageManager('{{ form[name].vars.id }}', options);
+                //initializeImageManager('{{ form[name].vars.id }}', options);
                 // console.log('{{form[name].vars.id}} onclick');
                 $('#image_upload_modal').modal('show');
             });
+            $('#image_preview_{{ form[name].vars.id }}.select-image-button .image_delete_button').click(function(event){
+                var options = $.parseJSON('{{ options | json_encode() | raw }}');
+                {% if options.uploadConfig.saveOriginal %}
+                options['originalImageFieldId'] = '{{ form[options.uploadConfig.saveOriginal].vars.id }}';
+                {% endif %}
+                removeImage($(this).parent().data('image'), $(this).parent().parent().find('input').attr('id'));
+
+                //initializeImageManager('{{ form[name].vars.id }}', options);
+                // console.log('{{form[name].vars.id}} onclick');
+                //$('#image_upload_modal').modal('show');
+            });
         });
         $('.select-image-button').mouseover(function(){
-            if(!$(this).hasClass('hide-disabled'))
+            if(!$(this).hasClass('hide-disabled')) {
                 $(this).children('.image_edit_button').removeClass('hidden');
+                $(this).children('.image_delete_button').removeClass('hidden');
+            }
         });
         $('.select-image-button').mouseout(function(){
-            if(!$(this).hasClass('hide-disabled'))
+            if(!$(this).hasClass('hide-disabled')) {
                 $(this).children('.image_edit_button').addClass('hidden');
+                $(this).children('.image_delete_button').addClass('hidden');
+            }
         });
 
     </script>
@@ -77,7 +98,7 @@
     {# trans_default_domain 'ComurImageBundle' #}
 
     {% spaceless %}
-        
+
         <div class="field-error clearfix hidden">
             <div id="{{form[name].vars.id}}_widget_error" class="alert alert-danger span6">
             </div>
@@ -92,7 +113,7 @@
                 </div>
             {% endfor %}
         </div>
-        <div class="image_add_button">
+        <div class="image_add_button" id="image_add_button_{{form[name].vars.id}}">
             <span class="btn btn-success add-image-button">
                 <i class="icon-picture icon-white"></i> {% trans %}Add image{% endtrans %}
             </span>
@@ -105,7 +126,8 @@
         $(document).ready(function(){
             rebindGalleryRemove();
             galleries['{{form[name].vars.id}}'] = true;
-            $('.image_add_button').click(function(event){ 
+            $('#image_add_button_{{ form[name].vars.id }}').click(function(event){
+
                 initializeImageManager('{{ form[name].vars.id }}', $.parseJSON('{{ options | json_encode() | raw }}'));
                 $('#image_upload_modal').modal('show');
             });
